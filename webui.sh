@@ -3,10 +3,9 @@
 # Please do not make any changes to this file,  #
 # change the variables in webui-user.sh instead #
 #################################################
-
 # If run from macOS, load defaults from webui-macos-env.sh
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    if [[ -f webui-macos-env.sh ]]
+if [ [ "$OSTYPE" == "darwin"* ] ]; then
+    if [ [ -f webui-macos-env.sh ] ]
         then
         source ./webui-macos-env.sh
     fi
@@ -14,43 +13,43 @@ fi
 
 # Read variables from webui-user.sh
 # shellcheck source=/dev/null
-if [[ -f webui-user.sh ]]
+if [ [ -f webui-user.sh ] ]
 then
     source ./webui-user.sh
 fi
 
 # Set defaults
 # Install directory without trailing slash
-if [[ -z "${install_dir}" ]]
+if [ [ -z "${install_dir}" ] ]
 then
     install_dir="$(pwd)"
 fi
 
 # Name of the subdirectory (defaults to stable-diffusion-webui)
-if [[ -z "${clone_dir}" ]]
+if [ [ -z "${clone_dir}" ] ]
 then
     clone_dir="stable-diffusion-webui"
 fi
 
 # python3 executable
-if [[ -z "${python_cmd}" ]]
+if [ [ -z "${python_cmd}" ] ]
 then
     python_cmd="python3"
 fi
 
 # git executable
-if [[ -z "${GIT}" ]]
+if [ [ -z "${GIT}" ] ]
 then
     export GIT="git"
 fi
 
 # python3 venv without trailing slash (defaults to ${install_dir}/${clone_dir}/venv)
-if [[ -z "${venv_dir}" ]]
+if [ [ -z "${venv_dir}" ] ]
 then
     venv_dir="venv"
 fi
 
-if [[ -z "${LAUNCH_SCRIPT}" ]]
+if [ [ -z "${LAUNCH_SCRIPT}" ] ]
 then
     LAUNCH_SCRIPT="launch.py"
 fi
@@ -82,7 +81,7 @@ printf "\e[1m\e[34mTested on Debian 11 (Bullseye)\e[0m"
 printf "\n%s\n" "${delimiter}"
 
 # Do not run as root
-if [[ $(id -u) -eq 0 && can_run_as_root -eq 0 ]]
+if [ [ $(id -u) -eq 0 && can_run_as_root -eq 0 ] ]
 then
     printf "\n%s\n" "${delimiter}"
     printf "\e[1m\e[31mERROR: This script must not be launched as root, aborting...\e[0m"
@@ -94,7 +93,7 @@ else
     printf "\n%s\n" "${delimiter}"
 fi
 
-if [[ -d .git ]]
+if [ [ -d .git ] ]
 then
     printf "\n%s\n" "${delimiter}"
     printf "Repo already cloned, using it as install directory"
@@ -116,7 +115,7 @@ case "$gpu_info" in
     *)
     ;;
 esac
-if echo "$gpu_info" | grep -q "AMD" && [[ -z "${TORCH_COMMAND}" ]]
+if echo "$gpu_info" | grep -q "AMD" && [ [ -z "${TORCH_COMMAND}" ] ]
 then
     # AMD users will still use torch 1.13 because 2.0 does not seem to work.
     export TORCH_COMMAND="pip install torch==1.13.1+rocm5.2 torchvision==0.14.1+rocm5.2 --index-url https://download.pytorch.org/whl/rocm5.2"
@@ -142,7 +141,7 @@ then
 fi
 
 cd "${install_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/, aborting...\e[0m" "${install_dir}"; exit 1; }
-if [[ -d "${clone_dir}" ]]
+if [ [ -d "${clone_dir}" ] ]
 then
     cd "${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
 else
@@ -157,13 +156,13 @@ printf "\n%s\n" "${delimiter}"
 printf "Create and activate python venv"
 printf "\n%s\n" "${delimiter}"
 cd "${install_dir}"/"${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
-if [[ ! -d "${venv_dir}" ]]
+if [ [ ! -d "${venv_dir}" ] ]
 then
     "${python_cmd}" -m venv "${venv_dir}"
     first_launch=1
 fi
 # shellcheck source=/dev/null
-if [[ -f "${venv_dir}"/bin/activate ]]
+if [ [ -f "${venv_dir}"/bin/activate ] ]
 then
     source "${venv_dir}"/bin/activate
 else
@@ -173,6 +172,7 @@ else
     exit 1
 fi
 
+<<<<<<< Updated upstream
 # Try using TCMalloc on Linux
 prepare_tcmalloc() {
     if [[ "${OSTYPE}" == "linux"* ]] && [[ -z "${NO_TCMALLOC}" ]] && [[ -z "${LD_PRELOAD}" ]]; then
@@ -187,6 +187,9 @@ prepare_tcmalloc() {
 }
 
 if [[ ! -z "${ACCELERATE}" ]] && [ ${ACCELERATE}="True" ] && [ -x "$(command -v accelerate)" ]
+=======
+if [ [ ! -z "${ACCELERATE}" ] ] && [ ${ACCELERATE}="True" ] && [ -x "$(command -v accelerate)" ]
+>>>>>>> Stashed changes
 then
     printf "\n%s\n" "${delimiter}"
     printf "Accelerating launch.py..."
